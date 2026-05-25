@@ -1,0 +1,17 @@
+{
+  "name": "gmg-api",
+  "version": "1.0.0",
+  "description": "GMG integration API - Arlo sync, webhook, and email automation for the Spray Academy / applicator directory",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "sync": "node sync.js",
+    "sync:dry": "node sync.js --dry-run"
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "dotenv": "^16.4.0",
+    "express": "^4.21.0",
+    "xml2js": "^0.6.2"
+  }
+}
