@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "dev": "nodemon index.js",
     "sync": "node sync.js",
     "sync:dry": "node sync.js --dry-run"
   },
@@ -13,5 +14,8 @@
     "dotenv": "^16.4.0",
     "express": "^4.21.0",
     "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
