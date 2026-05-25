@@ -1,3 +1,24 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# Logs
 logs/
+*.log
+npm-debug.log*
+
+# Runtime
+*.pid
+*.seed
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
