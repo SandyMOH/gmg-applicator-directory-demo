@@ -214,10 +214,16 @@ a { color: inherit; }
 
 .expand-arrow {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
   color: #94a3b8;
   font-size: 14px;
   transition: transform 0.2s;
-  margin-top: 6px;
+  margin-top: 4px;
+  transform-origin: center;
 }
 .expand-arrow.open { transform: rotate(90deg); }
 
@@ -233,9 +239,19 @@ a { color: inherit; }
   transition: background 0.15s;
 }
 .hub-sprayer-item:hover { background: #f1f5f9; }
+.hub-sprayer-item.active { background: #f6faec; box-shadow: inset 3px 0 0 #8DC63F; }
 .hub-sprayer-dot {
   width: 8px; height: 8px; border-radius: 50%;
   background: #6b9c1f; flex-shrink: 0;
+}
+.hub-sprayer-letter {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: #6b9c1f;
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
 }
 .hub-sprayer-name { font-weight: 600; color: #1f2421; }
 .hub-sprayer-cert {

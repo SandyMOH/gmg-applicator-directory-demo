@@ -4,14 +4,14 @@ import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
-function numberedIcon(number, color) {
+function createIcon(label, color) {
   return L.divIcon({
     className: 'custom-marker',
     html: `
       <svg width="32" height="42" viewBox="0 0 32 42" xmlns="http://www.w3.org/2000/svg">
         <path d="M16 0C7.2 0 0 7.2 0 16c0 12 16 26 16 26s16-14 16-26C32 7.2 24.8 0 16 0z" fill="${color}"/>
         <circle cx="16" cy="16" r="11" fill="white"/>
-        <text x="16" y="21" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="${color}">${number}</text>
+        <text x="16" y="21" text-anchor="middle" font-family="Arial" font-size="${String(label).length > 1 ? 11 : 13}" font-weight="bold" fill="${color}">${label}</text>
       </svg>`,
     iconSize: [32, 42],
     iconAnchor: [16, 42],
@@ -61,18 +61,20 @@ export default function MapView({ items, activeId, onMarkerClick }) {
       />
       <FitBounds points={validItems} />
       <FlyToActive active={activeItem} />
-      {validItems.map((item, index) => {
+      {validItems.map((item) => {
         const color = item.markerType === 'hub' ? '#2563eb' : '#6b9c1f';
+        // Use item.label if provided, otherwise use index number
+        const label = item.label || '';
         return (
           <Marker
             key={item.id}
             position={[item.lat, item.lng]}
-            icon={numberedIcon(index + 1, color)}
+            icon={createIcon(label, color)}
             ref={(ref) => { if (ref) markerRefs.current[item.id] = ref; }}
             eventHandlers={{ click: () => onMarkerClick(item.id) }}
           >
             <Popup>
-              <div className="popup-title">{index + 1}. {item.popupTitle}</div>
+              <div className="popup-title">{item.label ? `${item.label}. ` : ''}{item.popupTitle}</div>
               {item.popupCompany && <div className="popup-row">{item.popupCompany}</div>}
               {item.popupAddress && <div className="popup-row">{item.popupAddress}</div>}
               {item.popupPhone && <div className="popup-row">{item.popupPhone}</div>}

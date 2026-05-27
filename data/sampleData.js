@@ -1,6 +1,7 @@
-// Sample data for GMG Certified Applicator Directory demo v2
-// Structure: Hubs (companies/branches) + Sprayers (individuals)
-// Sprayers match to a hub by company name + state.
+// Sample data for GMG Certified Applicator Directory demo v3
+// Hubs (companies/branches) + Sprayers (individuals).
+// Every sprayer has their own coordinates.
+// A sprayer links to a hub by company name + state.
 
 // ===== SPRAY HUBS =====
 export const hubs = [
@@ -73,51 +74,69 @@ export const hubs = [
 ];
 
 // ===== CERTIFIED SPRAYERS =====
-// company + state drive the hub matching
+// Every sprayer has their own lat/lng (their own city).
 export const sprayers = [
-  // Graphonyx NSW -> matches GPX Sydney
-  { id: 's1', firstName: 'Michael', lastName: 'Chen', certNumber: 'GMG-SA-1042', company: 'Graphonyx', state: 'NSW', city: 'Sydney', email: 'ops@graphonyx.com.au', phone: '1300 007 223' },
-  { id: 's2', firstName: 'Sarah', lastName: 'Thompson', certNumber: 'GMG-SA-1043', company: 'Graphonyx', state: 'NSW', city: 'Sydney', email: 'ops@graphonyx.com.au', phone: '1300 007 223' },
-  // Graphonyx VIC -> matches GPX Melbourne
-  { id: 's3', firstName: 'David', lastName: 'Nguyen', certNumber: 'GMG-SA-1051', company: 'Graphonyx', state: 'VIC', city: 'Melbourne', email: 'ops@graphonyx.com.au', phone: '1300 007 223' },
-  { id: 's4', firstName: 'Emma', lastName: 'Wilson', certNumber: 'GMG-SA-1055', company: 'Graphonyx', state: 'VIC', city: 'Melbourne', email: 'ops@graphonyx.com.au', phone: '1300 007 223' },
-  // Graphonyx QLD -> matches GPX Brisbane
-  { id: 's5', firstName: 'James', lastName: 'Patterson', certNumber: 'GMG-SA-1060', company: 'Graphonyx', state: 'QLD', city: 'Brisbane', email: 'ops@graphonyx.com.au', phone: '1300 007 223' },
-  // Independent sprayers -> shown individually with their own company
-  { id: 's6', firstName: 'Robert', lastName: 'Hayes', certNumber: 'GMG-SA-1029', company: 'Hayes Coatings', state: 'NSW', city: 'Newcastle', suburb: 'Newcastle', postCode: '2300', email: 'rob@hayescoatings.com.au', phone: '0412 558 901', lat: -32.9270, lng: 151.7760 },
-  { id: 's7', firstName: 'Lisa', lastName: 'Anderson', certNumber: 'GMG-SA-1071', company: 'Anderson Industrial', state: 'SA', city: 'Adelaide', suburb: 'Mile End', postCode: '5031', email: 'lisa@andersonindustrial.com.au', phone: '0423 887 210', lat: -34.9180, lng: 138.5680 },
+  {
+    id: 's1', firstName: 'Michael', lastName: 'Chen', certNumber: 'GMG-SA-1042',
+    company: 'Graphonyx', suburb: 'Chatswood', city: 'Sydney', state: 'NSW', postCode: '2067',
+    email: 'm.chen@graphonyx.com.au', phone: '1300 007 223',
+    lat: -33.7969, lng: 151.1803,
+  },
+  {
+    id: 's2', firstName: 'Sarah', lastName: 'Thompson', certNumber: 'GMG-SA-1043',
+    company: 'Graphonyx', suburb: 'Parramatta', city: 'Sydney', state: 'NSW', postCode: '2150',
+    email: 's.thompson@graphonyx.com.au', phone: '1300 007 223',
+    lat: -33.8150, lng: 151.0011,
+  },
+  {
+    id: 's3', firstName: 'David', lastName: 'Nguyen', certNumber: 'GMG-SA-1051',
+    company: 'Graphonyx', suburb: 'Richmond', city: 'Melbourne', state: 'VIC', postCode: '3121',
+    email: 'd.nguyen@graphonyx.com.au', phone: '1300 007 223',
+    lat: -37.8230, lng: 144.9980,
+  },
+  {
+    id: 's4', firstName: 'Emma', lastName: 'Wilson', certNumber: 'GMG-SA-1055',
+    company: 'Graphonyx', suburb: 'Geelong', city: 'Geelong', state: 'VIC', postCode: '3220',
+    email: 'e.wilson@graphonyx.com.au', phone: '1300 007 223',
+    lat: -38.1499, lng: 144.3617,
+  },
+  {
+    id: 's5', firstName: 'James', lastName: 'Patterson', certNumber: 'GMG-SA-1060',
+    company: 'Graphonyx', suburb: 'Toowong', city: 'Brisbane', state: 'QLD', postCode: '4066',
+    email: 'j.patterson@graphonyx.com.au', phone: '1300 007 223',
+    lat: -27.4848, lng: 152.9920,
+  },
+  // Independent sprayers - no matching hub
+  {
+    id: 's6', firstName: 'Robert', lastName: 'Hayes', certNumber: 'GMG-SA-1029',
+    company: 'Hayes Coatings', suburb: 'Newcastle', city: 'Newcastle', state: 'NSW', postCode: '2300',
+    email: 'rob@hayescoatings.com.au', phone: '0412 558 901',
+    lat: -32.9270, lng: 151.7760,
+  },
+  {
+    id: 's7', firstName: 'Lisa', lastName: 'Anderson', certNumber: 'GMG-SA-1071',
+    company: 'Anderson Industrial', suburb: 'Mile End', city: 'Adelaide', state: 'SA', postCode: '5031',
+    email: 'lisa@andersonindustrial.com.au', phone: '0423 887 210',
+    lat: -34.9180, lng: 138.5680,
+  },
 ];
 
-// ===== MATCHING LOGIC =====
-// A sprayer matches a hub if company name matches AND state matches.
-// Future-proof: works for any company that has hub entries, not just Graphonyx.
-export function matchSprayerToHub(sprayer) {
-  return hubs.find(
-    (hub) =>
-      hub.company.toLowerCase() === (sprayer.company || '').toLowerCase() &&
-      hub.state === sprayer.state
+// ===== MATCHING =====
+// A sprayer belongs to a hub if company name + state both match.
+// Future-proof: works for any company that has hub entries.
+export function getHubSprayers(hub) {
+  return sprayers.filter(
+    (s) =>
+      s.company.toLowerCase() === hub.company.toLowerCase() &&
+      s.state === hub.state
   );
 }
 
-// Build the grouped structure for the Sprayers tab
-export function buildSprayerGroups() {
-  const groupedHubs = {}; // hubId -> { hub, sprayers: [] }
-  const independents = [];
-
-  for (const sprayer of sprayers) {
-    const hub = matchSprayerToHub(sprayer);
-    if (hub) {
-      if (!groupedHubs[hub.id]) {
-        groupedHubs[hub.id] = { hub, sprayers: [] };
-      }
-      groupedHubs[hub.id].sprayers.push(sprayer);
-    } else {
-      independents.push(sprayer);
-    }
-  }
-
-  return {
-    groups: Object.values(groupedHubs),
-    independents,
-  };
+// Does this sprayer belong to any hub?
+export function sprayerHasHub(sprayer) {
+  return hubs.some(
+    (h) =>
+      h.company.toLowerCase() === sprayer.company.toLowerCase() &&
+      h.state === sprayer.state
+  );
 }
